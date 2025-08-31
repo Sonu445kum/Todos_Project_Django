@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Delete Todo{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-danger text-white text-center rounded-top-4">
+          <h4 class="mb-0">⚠️ Confirm Delete</h4>
+        </div>
+        <div class="card-body text-center">
+          <p class="fs-5">
+            Are you sure you want to delete 
+            <strong class="text-danger">"{{ todo.title }}"</strong>?
+          </p>
+          <p class="text-muted">This action cannot be undone.</p>
+          <form method="post" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-danger px-4 me-2" type="submit">
+              ✅ Yes, Delete
+            </button>
+          </form>
+          <a class="btn btn-secondary px-4" href="{% url 'todos:home' %}">
+            ❌ Cancel
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

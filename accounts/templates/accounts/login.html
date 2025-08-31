@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg p-4" style="width: 400px;">
+    <h2 class="text-center mb-3">Login</h2>
+
+    <!-- Show messages -->
+    {% if messages %}
+      {% for m in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+          {{ m }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Login Form -->
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input class="form-control" name="username" placeholder="Enter username" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input class="form-control" type="password" name="password" placeholder="Enter password" required>
+      </div>
+      <button class="btn btn-success w-100" type="submit">Login</button>
+    </form>
+
+    <!-- Links -->
+    <div class="text-center mt-3">
+      <p><a href="{% url 'accounts:password_reset_request' %}">Forgot password?</a></p>
+      <p>New here? <a href="{% url 'accounts:signup' %}">Signup</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
