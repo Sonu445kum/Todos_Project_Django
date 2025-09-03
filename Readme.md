@@ -64,3 +64,68 @@ python manage.py runserver
 
 
 Open in browser: http://127.0.0.1:8000/
+
+
+Flow chart of our User Authentications
+                        ┌───────────────┐
+                        │   Signup      │
+                        │(signup view)  │
+                        └───────┬───────┘
+                                │ Success → redirect to Login
+                                │
+                                ▼
+                        ┌───────────────┐
+                        │   Login       │
+                        │(login_view)   │
+                        └───────┬───────┘
+           Wrong credentials  │
+           ---------------->  │
+           Error message       │
+                                ▼
+                        ┌───────────────┐
+                        │   Home / Todos│
+                        │(todos:home)   │
+                        └───────┬───────┘
+                                │
+             ┌──────────────────┴───────────────────┐
+             │                                      │
+             ▼                                      ▼
+     ┌───────────────┐                      ┌───────────────┐
+     │  Profile      │                      │ Logout        │
+     │(profile view) │                      │(logout_view)  │
+     └───────────────┘                      └───────────────┘
+             │
+             ▼
+    ┌─────────────────────┐
+    │Change Password       │
+    │(change_password)    │
+    └─────────────────────┘
+             │
+             ▼
+   ┌─────────────────────────────┐
+   │ Password Reset Request      │
+   │(password_reset_request)    │
+   └─────────────┬──────────────┘
+                 │ Email sent with unique link
+                 ▼
+   ┌─────────────────────────────┐
+   │ Password Reset Confirm       │
+   │(password_reset_confirm)    │
+   └─────────────────────────────┘
+                 │
+                 ▼
+             Set New Password → redirect to Login
+
+
+flowchart TD
+    Signup -->|Success| Login
+    Login -->|Valid| Home
+    Login -->|Invalid| ErrorMessage
+    Home --> Profile
+    Home --> Logout
+    Profile --> ChangePassword
+    ChangePassword --> Home
+    Home -->|Forgot Password| PasswordResetRequest
+    PasswordResetRequest --> EmailSent
+    EmailSent --> PasswordResetConfirm
+    PasswordResetConfirm --> Login

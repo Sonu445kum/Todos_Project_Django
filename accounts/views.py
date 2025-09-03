@@ -8,6 +8,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
+from django.urls import reverse 
 
 from .forms import SignUpForm
 User = get_user_model()
@@ -72,8 +73,12 @@ def password_reset_request(request):
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
-        reset_link = request.build_absolute_uri(f"/auth/reset-confirm/{uid}/{token}/")
-        # send email (console backend will print)
+        
+        # ✅ Yaha updated reset_link
+        reset_link = request.build_absolute_uri(
+            reverse("accounts:password_reset_confirm", kwargs={"uidb64": uid, "token": token})
+        )
+
         send_mail(
             subject="Password reset",
             message=f"Click the link to reset your password: {reset_link}",
@@ -85,7 +90,6 @@ def password_reset_request(request):
         return redirect("accounts:login")
 
     return render(request, "accounts/password_reset_request.html")
-
 # Password reset confirm (set new password)
 def password_reset_confirm(request, uidb64, token):
     try:
